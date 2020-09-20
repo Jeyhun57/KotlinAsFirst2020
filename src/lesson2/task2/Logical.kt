@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_PARAMETER")
+@file:Suppress("UNUSED_PARAMETER", "UNREACHABLE_CODE")
 
 package lesson2.task2
 
@@ -18,7 +18,15 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Четырехзначное число назовем счастливым, если сумма первых двух ее цифр равна сумме двух последних.
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
-fun isNumberHappy(number: Int): Boolean = TODO()
+fun isNumberHappy(number: Int): Boolean {
+    val a = (number / 1000) + ((number / 100) % 10)
+    val b = ((number / 10) % 10) + number % 10
+    return when (a) {
+        b -> true
+        else -> false
+    }
+
+}
 
 /**
  * Простая (2 балла)
@@ -59,4 +67,11 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = TODO()
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
+    return when {
+        (a <= r && b <= s) || (b <= r && a <= s) -> true
+        (b <= r && c <= s) || (c <= r && b <= s) -> true
+        (c <= r && a <= s) || (a <= r && c <= s) -> true
+        else -> false
+    }
+}
