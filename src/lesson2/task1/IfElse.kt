@@ -109,10 +109,12 @@ fun whichRookThreatens(
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
 ): Int {
-    return if ((kingX == rookX1 || kingX == rookX2) && (kingY == rookY1 || kingY == rookY2)) 3
-    else if (kingX == rookX1 || kingY == rookY1) 1
-    else if (kingX == rookX2 || kingY == rookY2) 2
-    else 0
+    return when {
+        (kingX == rookX1 || kingX == rookX2) && (kingY == rookY1 || kingY == rookY2) -> 3
+        kingX == rookX1 || kingY == rookY1 -> 1
+        kingX == rookX2 || kingY == rookY2 -> 2
+        else -> 0
+    }
 }
 
 /**
@@ -140,23 +142,16 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    return if (!(a + b > c && a + c > b && c + b > a)) -1 else
-        if (a > b && a > c) when {
-            sqr(a) < sqr(b) + sqr(c) -> 0
-            sqr(a) == sqr(b) + sqr(c) -> 1
+    return if (!(a + b > c && a + c > b && c + b > a)) -1 else {
+        val m1 = maxOf(a, b, c)
+        val m2 = minOf(a, b, c)
+        val m3 = a + b + c - m1 - m2
+        when {
+            sqr(m1) < sqr(m2) + sqr(m3) -> 0
+            sqr(m1) == sqr(m2) + sqr(m3) -> 1
             else -> 2
         }
-        else if (b > a && b > c) when {
-            sqr(b) < sqr(a) + sqr(c) -> 0
-            sqr(b) == sqr(a) + sqr(c) -> 1
-            else -> 2
-        }
-        else when {
-            sqr(c) < sqr(a) + sqr(b) -> 0
-            sqr(c) == sqr(a) + sqr(b) -> 1
-            else -> 2
-        }
-
+    }
 }
 
 /**
