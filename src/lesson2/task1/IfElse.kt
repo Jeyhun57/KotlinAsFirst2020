@@ -108,14 +108,13 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int {
-    return when {
+) =
+    when {
         (kingX == rookX1 || kingX == rookX2) && (kingY == rookY1 || kingY == rookY2) -> 3
         kingX == rookX1 || kingY == rookY1 -> 1
         kingX == rookX2 || kingY == rookY2 -> 2
         else -> 0
     }
-}
 
 /**
  * Простая (2 балла)
@@ -141,8 +140,8 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int {
-    return if (!(a + b > c && a + c > b && c + b > a)) -1 else {
+fun triangleKind(a: Double, b: Double, c: Double) =
+    if (!(a + b > c && a + c > b && c + b > a)) -1 else {
         val m1 = maxOf(a, b, c)
         val m2 = minOf(a, b, c)
         val m3 = a + b + c - m1 - m2
@@ -152,7 +151,6 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
             else -> 2
         }
     }
-}
 
 /**
  * Средняя (3 балла)
@@ -166,5 +164,5 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     return if (b in c..d && a <= c) b - c else
         if (b <= d && a > c && d > a) b - a else
             if (d <= b && a > c && d > a) d - a else
-                if (d < b && a < c && d > a) d - c else -1
+                if (d < b && a < c && d >= a) d - c else -1
 }
