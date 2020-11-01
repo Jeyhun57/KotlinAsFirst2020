@@ -3,6 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.digitNumber
 import kotlin.math.sqrt
 
 // Урок 4: списки
@@ -127,7 +128,10 @@ fun abs(v: List<Double>): Double = TODO()
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double = TODO()
+fun mean(list: List<Double>): Double {
+    return if (list.isEmpty()) 0.0
+    else list.sum() / list.size
+}
 
 /**
  * Средняя (3 балла)
@@ -186,7 +190,18 @@ fun factorize(n: Int): List<Int> = TODO()
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String {
+    val result = mutableListOf<Int>()
+    var x = n
+    for (i in 2..(sqrt(n.toDouble()).toInt())) {
+        while (x % i == 0 && x != 1) {
+            result += i
+            x /= i
+        }
+    }
+    if (x != 1) result += x
+    return result.joinToString(separator = "*")
+}
 
 /**
  * Средняя (3 балла)
@@ -241,7 +256,41 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    var answer = ""
+    var a = n
+    var b = 0
+    while (a > 0) {
+        b = b * 10 + a % 10
+        a /= 10
+    }
+    var number = digitNumber(n)
+    val list1 = listOf(
+        "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"
+    )
+    val list2 = listOf(
+        "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"
+    )
+    val list3 = listOf(
+        "", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"
+    )
+    val list4 = listOf(
+        "", "M", "MM", "MMM"
+    )
+    while (number > 0) {
+        val c = b % 10
+        answer += when (number) {
+            4 -> list4[c]
+            3 -> list3[c]
+            2 -> list2[c]
+            1 -> list1[c]
+            else -> break
+        }
+        number--
+        b /= 10
+    }
+    return answer
+}
 
 /**
  * Очень сложная (7 баллов)
