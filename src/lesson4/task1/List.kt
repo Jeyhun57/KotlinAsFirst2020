@@ -194,7 +194,7 @@ fun factorizeToString(n: Int): String {
     val result = mutableListOf<Int>()
     var x = n
     for (i in 2..(sqrt(n.toDouble()).toInt())) {
-        while (x % i == 0 && x != 1) {
+        while (x % i == 0) {
             result += i
             x /= i
         }
@@ -265,27 +265,16 @@ fun roman(n: Int): String {
         a /= 10
     }
     var number = digitNumber(n)
-    val list1 = listOf(
-        "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"
-    )
-    val list2 = listOf(
-        "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"
-    )
-    val list3 = listOf(
-        "", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"
-    )
-    val list4 = listOf(
+    val list = listOf(
+        "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX",
+        "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC",
+        "", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM",
         "", "M", "MM", "MMM"
     )
+
     while (number > 0) {
         val c = b % 10
-        answer += when (number) {
-            4 -> list4[c]
-            3 -> list3[c]
-            2 -> list2[c]
-            1 -> list1[c]
-            else -> break
-        }
+        answer += list[(number - 1) * 10 + c]
         number--
         b /= 10
     }
