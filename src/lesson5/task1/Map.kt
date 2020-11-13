@@ -108,7 +108,12 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
+    for ((key, value) in a) {
+        if (value != b[key]) return false
+    }
+    return true
+}
 
 /**
  * Простая (2 балла)
@@ -277,7 +282,14 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    for (a in list.indices) {
+        for (b in 1 until list.size) {
+            if (list[a] + list[b] == number && a != b) return Pair(a, b)
+        }
+    }
+    return Pair(-1, -1)
+}
 
 /**
  * Очень сложная (8 баллов)
@@ -300,4 +312,32 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val list1 = mutableListOf<String>()
+    val list2 = mutableListOf<Int>()
+    val list3 = mutableListOf<Int>()
+    val answer = mutableSetOf<String>()
+    for ((key, values) in treasures) {
+        list1 += key
+        list2 += values.first
+        list3 += values.second
+    }
+    val a = Array(list1.size + 1) { Array(capacity + 1) { 0 } }
+    for (x in 1..list1.size) {
+        for (y in 1..capacity) {
+            if (list2[x - 1] <= y) a[x][y] = maxOf(a[x - 1][y], a[x - 1][y - list2[x - 1]] + list3[x - 1])
+            else a[x][y] = a[x - 1][y]
+        }
+    }
+
+    fun findAnswer(k: Int, c: Int) {
+        if (a[k][c] == 0) return
+        if (a[k - 1][c] == a[k][c]) findAnswer(k - 1, c)
+        else {
+            findAnswer(k - 1, c - list2[k - 1])
+            answer += list1[k - 1]
+        }
+    }
+    findAnswer(list1.size, capacity)
+    return answer
+}
