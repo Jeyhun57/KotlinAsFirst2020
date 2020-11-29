@@ -283,10 +283,10 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    for (a in list.indices) {
-        for (b in 1 until list.size) {
-            if (list[a] + list[b] == number && a != b) return Pair(a, b)
-        }
+    val map = mutableMapOf<Int, Int>()
+    for ((k, v) in list.withIndex()) {
+        if (map.containsKey(number - list[k])) return Pair(map[number - list[k]]!!, k)
+        map[v] = k
     }
     return Pair(-1, -1)
 }
@@ -313,31 +313,32 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    val list1 = mutableListOf<String>()
-    val list2 = mutableListOf<Int>()
-    val list3 = mutableListOf<Int>()
+    val listTreasure = mutableListOf<String>()
+    val listWeight = mutableListOf<Int>()
+    val listPrice = mutableListOf<Int>()
     val answer = mutableSetOf<String>()
     for ((key, values) in treasures) {
-        list1 += key
-        list2 += values.first
-        list3 += values.second
+        listTreasure += key
+        listWeight += values.first
+        listPrice += values.second
     }
-    val a = Array(list1.size + 1) { Array(capacity + 1) { 0 } }
-    for (x in 1..list1.size) {
+    val array = Array(listTreasure.size + 1) { Array(capacity + 1) { 0 } }
+    for (x in 1..listTreasure.size) {
         for (y in 1..capacity) {
-            if (list2[x - 1] <= y) a[x][y] = maxOf(a[x - 1][y], a[x - 1][y - list2[x - 1]] + list3[x - 1])
-            else a[x][y] = a[x - 1][y]
+            if (listWeight[x - 1] <= y) array[x][y] =
+                maxOf(array[x - 1][y], array[x - 1][y - listWeight[x - 1]] + listPrice[x - 1])
+            else array[x][y] = array[x - 1][y]
         }
     }
 
     fun findAnswer(k: Int, c: Int) {
-        if (a[k][c] == 0) return
-        if (a[k - 1][c] == a[k][c]) findAnswer(k - 1, c)
+        if (array[k][c] == 0) return
+        if (array[k - 1][c] == array[k][c]) findAnswer(k - 1, c)
         else {
-            findAnswer(k - 1, c - list2[k - 1])
-            answer += list1[k - 1]
+            findAnswer(k - 1, c - listWeight[k - 1])
+            answer += listTreasure[k - 1]
         }
     }
-    findAnswer(list1.size, capacity)
+    findAnswer(listTreasure.size, capacity)
     return answer
 }
