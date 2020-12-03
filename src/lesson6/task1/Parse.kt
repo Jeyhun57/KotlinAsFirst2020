@@ -114,7 +114,17 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    var max = -1
+    if (jumps.matches(Regex("""[\d%\- ]*"""))) {
+        val jump = jumps.split(" ")
+        for (x in jump) {
+            val m = x.toIntOrNull() ?: -1
+            if (m > max) max = m
+        }
+    }
+    return max
+}
 
 /**
  * Сложная (6 баллов)
@@ -175,7 +185,24 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    if (Regex("""[IVXLCDM]+""").matches(roman)) {
+        return roman
+            .replace("M", "DD")
+            .replace("CM", "DCD")
+            .replace("CD", "CCCC")
+            .replace("D", "CCCCC")
+            .replace("C", "LL")
+            .replace("XC", "LXL")
+            .replace("XL", "XXXX")
+            .replace("L", "XXXXX")
+            .replace("IX", "VIV")
+            .replace("X", "VV")
+            .replace("IV", "IIII")
+            .replace("V", "IIIII").length
+    }
+    return -1
+}
 
 /**
  * Очень сложная (7 баллов)
