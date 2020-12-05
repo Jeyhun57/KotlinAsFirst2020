@@ -116,11 +116,13 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  */
 fun bestLongJump(jumps: String): Int {
     var max = -1
-    if (jumps.matches(Regex("""[\d%\- ]*"""))) {
+    if (jumps.matches(Regex("""^((\d+|%|-) )*(\d+|%|-)$"""))) {
         val jump = jumps.split(" ")
         for (x in jump) {
-            val m = x.toIntOrNull() ?: -1
-            if (m > max) max = m
+            val m = x.toIntOrNull()
+            if (m != null) {
+                if (m > max) max = m
+            }
         }
     }
     return max
@@ -189,14 +191,11 @@ fun fromRoman(roman: String): Int {
     if (Regex("""[IVXLCDM]+""").matches(roman)) {
         return roman
             .replace("M", "DD")
-            .replace("CM", "DCD")
             .replace("CD", "CCCC")
             .replace("D", "CCCCC")
             .replace("C", "LL")
-            .replace("XC", "LXL")
             .replace("XL", "XXXX")
             .replace("L", "XXXXX")
-            .replace("IX", "VIV")
             .replace("X", "VV")
             .replace("IV", "IIII")
             .replace("V", "IIIII").length
