@@ -2,6 +2,8 @@
 
 package lesson11.task1
 
+import kotlin.math.pow
+
 /**
  * Класс "комплексное число".
  *
@@ -16,45 +18,61 @@ class Complex(val re: Double, val im: Double) {
     /**
      * Конструктор из вещественного числа
      */
-    constructor(x: Double) : this(TODO(), TODO())
+    constructor(x: Double) : this(x, 0.0)
 
     /**
      * Конструктор из строки вида x+yi
      */
-    constructor(s: String) : this(TODO(), TODO())
+    constructor(s: String) : this(
+        if (s.contains("+")) s.split("+")[0].toDouble()
+        else s.split(Regex("[-+i]"))[0].toDouble(),
+        if (s.contains("+")) s.split("+")[1].removeSuffix("i").toDouble()
+        else -s.split(Regex("[-+i]"))[1].removeSuffix("i").toDouble()
+    )
 
     /**
      * Сложение.
      */
-    operator fun plus(other: Complex): Complex = TODO()
+    operator fun plus(other: Complex): Complex = Complex(re + other.re, im + other.im)
 
     /**
      * Смена знака (у обеих частей числа)
      */
-    operator fun unaryMinus(): Complex = TODO()
+    operator fun unaryMinus(): Complex = Complex(-re, -im)
 
     /**
      * Вычитание
      */
-    operator fun minus(other: Complex): Complex = TODO()
+    operator fun minus(other: Complex): Complex = Complex(re - other.re, im - other.im)
 
     /**
      * Умножение
      */
-    operator fun times(other: Complex): Complex = TODO()
+    operator fun times(other: Complex): Complex = Complex(
+        re * other.re - im * other.im,
+        re * other.im + im * other.re
+    )
 
     /**
      * Деление
      */
-    operator fun div(other: Complex): Complex = TODO()
+    operator fun div(other: Complex): Complex = Complex(
+        (re * other.re + im * other.im) / (other.re.pow(2) + other.im.pow(2)),
+        (other.re * im - re * other.im) / (other.re.pow(2) + other.im.pow(2))
+    )
 
     /**
      * Сравнение на равенство
      */
-    override fun equals(other: Any?): Boolean = TODO()
+    override fun equals(other: Any?): Boolean = this === other || other is Complex && re == other.re && im == other.im
 
     /**
      * Преобразование в строку
      */
-    override fun toString(): String = TODO()
+    override fun toString(): String = "$re+${im}i"
+    override fun hashCode(): Int {
+        var res = re.hashCode()
+        res = 31 * res + im.hashCode()
+        return res
+    }
 }
